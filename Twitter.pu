@@ -1,0 +1,90 @@
+@startuml yonde
+' hide the spot
+' hide circle
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+entity "users" as users {
+  user_id
+  --
+  user_name
+  mail_address
+  profile_text
+  profile_image
+  header_image
+  password
+  registration_date
+}
+
+entity "user_follows" as user_follows {
+  user_follow_id
+  --
+  follower_id<<FK>>
+  followee_id<<FK>>
+}
+
+entity "tweets" as tweets {
+  tweet_id
+  --
+  user_id<<FK>>
+  tweet_content
+  quote_tweet_id<<FK>>
+  reply_tweet_id<<FK>>
+  tweet_date
+}
+
+entity "tweet_media" as tweet_media {
+  tweet_media_id
+  --
+  tweet_id<<FK>>
+  media
+}
+
+entity "retweets" as retweets {
+  retweet_id
+  --
+  user_id<<FK>>
+  tweet_id<<FK>>
+  retweet_date
+}
+
+entity "lists" as lists {
+  list_id
+  --
+  list_name
+  author_id<<FK>>
+  header_image
+}
+
+entity "list_members" as list_members {
+  list_member_id
+  --
+  user_id<<FK>>
+  list_id<<FK>>
+  operator_id<<FK>>
+}
+
+entity "list_follows" as list_follows {
+  list_follow_id
+  --
+  user_id<<FK>>
+  list_id<<FK>>
+}
+
+users ||--o{ tweets
+users ||--o{ user_follows
+users ||--o{ user_follows
+users ||--o{ retweets
+tweets ||--o{ tweets
+tweets ||--o{ tweets
+retweets ||--|{ tweets
+tweets ||--o{ tweet_media
+users ||--o{ lists
+users ||--o{ list_members
+users ||--o{ list_members
+users ||--o{ list_follows
+lists ||--o{ list_follows
+lists ||--o{ list_members
+
+@enduml
